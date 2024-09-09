@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     const accountId = "ACC00002"
     // Fetch Patient's notifications
-    const fetchbookings = await fetch(`/api/bookings/${accountId}`, {
+    const fetchbookings = await fetch(`https://booking-service-np.apps.hackathon.cnasg.dellcsc.com/api/bookings/${accountId}`, {
         method: 'GET'
     });
 
