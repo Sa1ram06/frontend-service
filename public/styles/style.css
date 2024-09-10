@@ -643,6 +643,12 @@
     font-size: 32px;
 }
 
+#badge-display p {
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+}
+
 .badges .profile-container {
     padding: 0px 20px;
     height:auto;
