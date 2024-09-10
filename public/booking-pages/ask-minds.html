@@ -6,15 +6,44 @@
     <title>Ask Minds Page</title>
     <link rel="stylesheet" href="../styles/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
     <style>
         #Notification {
             display: none; /* Initially hidden */
+            padding: 20px;
+            background-color:#1E386B;; /* Green for success message */
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+
+            /* Flexbox to center text vertically and horizontally */
+            display: flex;
+            flex-direction: column; /* Stacks the animation and text vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 300px; /* Adjusted height to accommodate the animation */
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+            border-radius: 20px;
         }
 
         h2 {
+            font-family: 'Open Sans', sans-serif;
             color: #ffffff; /* Dark blue heading */
             font-size: 1.5em;
             margin-bottom: 10px;
+        }
+
+        #Notificiation-child {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2em;
+            margin: 0; /* Remove margin to ensure proper centering */
+            margin-top: 20px; /* Give some space between the text and animation */
+            text-align: center;
+            color:#ffffff
         }
     </style>
 </head>
@@ -31,14 +60,23 @@
         </a>
 
         <div id="Notification">
+            <!-- Lottie Animation -->
+            <dotlottie-player src="https://lottie.host/b371ae55-1d94-4756-af60-2d215b29d319/PYHdabwx7M.json" 
+                background="transparent" 
+                speed="1" 
+                style="width: 200px; height: 200px;" 
+                loop 
+                autoplay>
+            </dotlottie-player>
             <h2 id="Notificiation-child">Asking MINDS Staff, Wait for a while...</h2>
         </div>
     </div>
     
     <script>
+        document.getElementById("Notification").style.display = "none";
         async function displaySuccessNotification() {
             // Show the notification
-            document.getElementById("Notification").style.display = 'block'
+            document.getElementById("Notification").style.display = 'flex';
 
             const clientId = "ACC00002";
             const staffId = "ACC00001";
@@ -48,7 +86,7 @@
             const slots = 1;
             const description = "Scenario Practice";
 
-            await setTimeout(3000);
+            setTimeout(3000);
 
             // create Session
             const createSessionResponse = await fetch(`https://booking-service-np.apps.hackathon.cnasg.dellcsc.com/api/session`, {
@@ -78,12 +116,14 @@
                 });
 
                 document.getElementById("Notificiation-child").textContent = "SUCCESS! MINDS has booked a session for you!";
-                document.getElementById("Notification").appendChild(document.createElement("br"));
+                document.getElementById("Notificiation-child").appendChild(document.createElement("br"));
                 document.getElementById("Notificiation-child").appendChild(document.createTextNode("Go back to view your Bookings"));
             } else {
-                document.getElementById("Notificiation-child").textContent = "Please talk to your MINDS Coach if you see this message";
+                document.getElementById("Notificiation-child").textContent = "Please talk to your MINDS Coach if you see this message.";
                 document.getElementById("Notificiation-child").appendChild(document.createTextNode("Go back to view your Bookings"));
             }
+
+            
         }
     </script>
 </body>

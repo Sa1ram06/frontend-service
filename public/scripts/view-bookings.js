@@ -1,20 +1,15 @@
 document.addEventListener('DOMContentLoaded', async function () {
 
     const accountId = "ACC00002"
-    // Fetch Patient's notifications
     const fetchbookings = await fetch(`https://booking-service-np.apps.hackathon.cnasg.dellcsc.com/api/bookings/${accountId}`, {
         method: 'GET'
     });
 
-    // populate notifications
     const bookingsJson = await fetchbookings.json();
     const bookings = bookingsJson.bookings;
-    console.log(bookingsJson);
-    console.log(bookings);
 
     if (bookings && bookings.length > 0) {
         for (const booking of bookings) {
-            // Convert booking.SessionDate to a readable format
             var sessionDate = new Date(booking.SessionDate);
             var options = { year: 'numeric', month: 'long', day: 'numeric' };
             var formattedDate = sessionDate.toLocaleDateString('en-US', options);
@@ -22,51 +17,62 @@ document.addEventListener('DOMContentLoaded', async function () {
             var bookingElement = document.createElement("div");
             bookingElement.className = "booking-card";
 
-            var infoElement = document.createElement("div");
-            infoElement.className = "info";
-
-            var labelElement1 = document.createElement("label");
-            labelElement1.textContent = "Time: ";
-            labelElement1.appendChild(document.createTextNode(booking.SessionTime));
-            labelElement1.appendChild(document.createElement("br"));
-
-            var labelElement2 = document.createElement("label");
-            labelElement2.textContent = "Date: ";
-            labelElement2.appendChild(document.createTextNode(formattedDate));
-            labelElement2.appendChild(document.createElement("br"));
-
-            var labelElement3 = document.createElement("label");
-            labelElement3.textContent = "Location: ";
-            labelElement3.appendChild(document.createTextNode(booking.SessionLocation));
-            labelElement3.appendChild(document.createElement("br"));
-
-            var labelElement4 = document.createElement("label");
-            labelElement4.textContent = "Status: ";
-            var labelElement4text = document.createElement("label");
-
-            if (booking.BookingStatus === "Cancelled" || booking.BookingStatus === "Absent") {
-                labelElement4text.style.color = "#F41919";
-            } else {
-                labelElement4text.style.color = "#51BC63";
-            }
-
-            labelElement4text.appendChild(document.createTextNode(booking.BookingStatus));
-            labelElement4.appendChild(labelElement4text);
-
-            infoElement.appendChild(labelElement1);
-            infoElement.appendChild(labelElement2);
-            infoElement.appendChild(labelElement3);
-            infoElement.appendChild(labelElement4);
-
             var bookingName = document.createElement("h2");
             bookingName.textContent = `${booking.SessionDescription}`;
 
-            // potential cancel button
-            /*
-            var exitElement = document.createElement("div");
-            exitElement.className = "exit-box";
-            exitElement.appendChild(document.createTextNode("Cancel Booking"))
-            */
+            var infoElement = document.createElement("div");
+            infoElement.className = "info";
+
+            // Time row
+            var timeRow = document.createElement("div");
+            timeRow.className = "info-item";
+            var timeImg = document.createElement("img");
+            timeImg.src = "../images/booking/time.png"; // Add your time icon path here
+            var timeLabel = document.createElement("label");
+            timeLabel.textContent = `Time: ${booking.SessionTime}`;
+            timeRow.appendChild(timeImg);
+            timeRow.appendChild(timeLabel);
+
+            // Date row
+            var dateRow = document.createElement("div");
+            dateRow.className = "info-item";
+            var dateImg = document.createElement("img");
+            dateImg.src = "../images/booking/date.png"; // Add your date icon path here
+            var dateLabel = document.createElement("label");
+            dateLabel.textContent = `Date: ${formattedDate}`;
+            dateRow.appendChild(dateImg);
+            dateRow.appendChild(dateLabel);
+
+            // Location row
+            var locationRow = document.createElement("div");
+            locationRow.className = "info-item";
+            var locationImg = document.createElement("img");
+            locationImg.src = "../images/booking/location.png"; // Add your location icon path here
+            var locationLabel = document.createElement("label");
+            locationLabel.textContent = `Location: ${booking.SessionLocation}`;
+            locationRow.appendChild(locationImg);
+            locationRow.appendChild(locationLabel);
+
+            // Status row
+            var statusRow = document.createElement("div");
+            statusRow.className = "info-item";
+            var statusLabel = document.createElement("label");
+            statusLabel.textContent = "Status: ";
+            var statusText = document.createElement("label");
+            if (booking.BookingStatus === "Cancelled" || booking.BookingStatus === "Absent") {
+                statusText.className = "status-cancelled";
+            } else {
+                statusText.className = "status-confirmed";
+            }
+            statusText.textContent = booking.BookingStatus;
+
+            statusLabel.appendChild(statusText);
+            statusRow.appendChild(statusLabel);
+
+            infoElement.appendChild(timeRow);
+            infoElement.appendChild(dateRow);
+            infoElement.appendChild(locationRow);
+            infoElement.appendChild(statusRow);
 
             bookingElement.appendChild(bookingName);
             bookingElement.appendChild(infoElement);
@@ -82,6 +88,5 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         bookingElement.appendChild(bookingName);
         document.getElementById("bookings-list").appendChild(bookingElement);
-
     }
 });
